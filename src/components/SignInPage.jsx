@@ -55,31 +55,39 @@ const SignInPage = ({ onSignInSuccess }) => {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Email</label>
+            <label htmlFor="signin-email">Email</label>
             <input
+              id="signin-email"
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
               placeholder="username@example.com"
               disabled={loading}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label>Password</label>
+            <label htmlFor="signin-password">Password</label>
             <div className="password-group">
               <input
+                id="signin-password"
                 type="password"
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="••••••••••"
                 disabled={loading}
+                required
               />
-              <a href="#" className="forgot-password">
+              <button
+                type="button"
+                className="forgot-password"
+                aria-label="Forgot password"
+              >
                 Forgot password?
-              </a>
+              </button>
             </div>
           </div>
 

@@ -222,7 +222,6 @@ npm run server
 - [ ] User presence indicators
 - [ ] Message reactions/emojis
 - [ ] File/image sharing in messages
-- [ ] User roles and permissions
 - [ ] Real database integration (MongoDB)
 - [ ] Backend API deployment
 

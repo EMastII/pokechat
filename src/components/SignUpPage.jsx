@@ -119,46 +119,53 @@ const SignUpPage = ({ onSignUpSuccess }) => {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Name</label>
+            <label htmlFor="signup-name">Name</label>
             <input
+              id="signup-name"
               type="text"
               name="name"
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Ash Ketchum"
               disabled={loading}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label>Email</label>
+            <label htmlFor="signup-email">Email</label>
             <input
+              id="signup-email"
               type="email"
               name="email"
               value={formData.email}
               onChange={handleInputChange}
               placeholder="username@example.com"
               disabled={loading}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label>Password</label>
+            <label htmlFor="signup-password">Password</label>
             <input
+              id="signup-password"
               type="password"
               name="password"
               value={formData.password}
               onChange={handleInputChange}
               placeholder="••••••••••"
               disabled={loading}
+              required
             />
           </div>
 
           <div className="form-group">
-            <label>Favorite Pokémon</label>
+            <label htmlFor="signup-pokemon">Favorite Pokémon</label>
             <div className="pokemon-input-container">
               <div className="pokemon-input-wrapper">
                 <input
+                  id="signup-pokemon"
                   type="text"
                   name="favoritePokemon"
                   value={formData.favoritePokemon}
@@ -169,6 +176,7 @@ const SignUpPage = ({ onSignUpSuccess }) => {
                   onFocus={() => setShowPokemonDropdown(true)}
                   placeholder="Select Pokémon by name or select Random Pokémon"
                   disabled={loading}
+                  required
                 />
                 {showPokemonDropdown && formData.favoritePokemon && (
                   <div className="pokemon-dropdown">
