@@ -1,10 +1,10 @@
 # PokéChat - Team Communication Platform
 
-A modern web application for team communication built with React, featuring Pokémon-themed profiles and real-time messaging.
+PokéChat is a Pokémon-inspired messaging app built for friendly, modern team communication. It blends polished React UI, profile customization, and real-time chat interactions into a playful but professional collaboration experience.
 
 ## 🎯 Overview
 
-PokéChat is a team chat application that combines professional communication with fun Pokémon integration. Users can sign up, create profiles with their favorite Pokémon, and communicate with team members in real-time.
+This project is designed to feel both approachable and functional: users can create an account, choose a favorite Pokémon, personalize their profile, and join a shared team chat experience. It showcases a lightweight frontend stack, mock backend logic, and a clean dashboard-first interface suitable for portfolio work and concept demos.
 
 ## 🔗 GitHub Repository
 
