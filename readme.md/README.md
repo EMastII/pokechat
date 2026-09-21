@@ -9,6 +9,7 @@ This project is designed to feel both approachable and functional: users can cre
 ## 🔗 GitHub Repository
 
 - Repository: https://github.com/EMastII/pokechat
+- Live demo: https://emastii.github.io/pokechat/
 - Clone: `git clone https://github.com/EMastII/pokechat.git`
 - Issues and project updates: https://github.com/EMastII/pokechat/issues
 

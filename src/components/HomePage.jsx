@@ -1,9 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchFeaturedPokemon } from "../utils/ThirdPartyApi";
 import "./HomePage.css";
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const [pokemonList, setPokemonList] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(3);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadPokemon = async () => {
+      try {
+        setLoading(true);
+        setError("");
+        const data = await fetchFeaturedPokemon();
+        setPokemonList(data);
+      } catch (err) {
+        setError(
+          "Sorry, something went wrong during the request. There may be a connection issue or the server may be down. Please try again later.",
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPokemon();
+  }, []);
+
+  const visiblePokemon = pokemonList.slice(0, visibleCount);
+  const hasMorePokemon = visibleCount < pokemonList.length;
+
+  const handleShowMore = () => {
+    setVisibleCount((current) => current + 3);
+  };
 
   return (
     <main className="home-page">
@@ -36,6 +67,55 @@ const HomePage = () => {
         </section>
 
         <section className="auth-section" aria-label="Authentication options">
+          <div className="featured-pokemon-panel">
+            <h2>Featured Pokémon</h2>
+
+            {loading && (
+              <div className="api-status" aria-live="polite">
+                <div className="loader" aria-label="Loading content" />
+                <p>Loading Pokémon...</p>
+              </div>
+            )}
+
+            {!loading && error && (
+              <p className="api-status api-error" aria-live="assertive">
+                {error}
+              </p>
+            )}
+
+            {!loading && !error && pokemonList.length === 0 && (
+              <p className="api-status api-empty">Nothing found</p>
+            )}
+
+            {!loading && !error && pokemonList.length > 0 && (
+              <>
+                <div className="pokemon-cards">
+                  {visiblePokemon.map((pokemon) => (
+                    <article key={pokemon.id} className="pokemon-card">
+                      <img
+                        src={pokemon.imageUrl}
+                        alt={pokemon.name}
+                        className="pokemon-card-image"
+                      />
+                      <h3>{pokemon.name}</h3>
+                      <span>{pokemon.type}</span>
+                    </article>
+                  ))}
+                </div>
+
+                {hasMorePokemon && (
+                  <button
+                    type="button"
+                    className="show-more-button"
+                    onClick={handleShowMore}
+                  >
+                    Show more
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+
           <div className="button-group">
             <button className="btn-signin" onClick={() => navigate("/signin")}>
               Sign In
