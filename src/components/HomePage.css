@@ -1,0 +1,128 @@
+.home-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.home-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  max-width: 1200px;
+  width: 100%;
+  align-items: center;
+}
+
+.pokemon-section {
+  text-align: center;
+}
+
+.pokemon-grid {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 0 auto 30px;
+  background-color: white;
+  border: 3px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+  padding: 10px;
+}
+
+.pokemon-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: #f9f9f9;
+}
+
+.pokemon-bg-1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.pokemon-bg-2 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.pokemon-bg-3 {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.pokemon-bg-4 {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.pokemon-section h1 {
+  font-size: 48px;
+  margin: 20px 0 10px;
+  color: #333;
+  font-weight: bold;
+}
+
+.pokemon-section p {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.auth-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+}
+
+.btn-signin,
+.btn-signup {
+  padding: 15px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-signin {
+  background-color: #2196f3;
+  color: white;
+}
+
+.btn-signin:hover {
+  background-color: #0b7dda;
+}
+
+.btn-signup {
+  background-color: #000;
+  color: white;
+}
+
+.btn-signup:hover {
+  background-color: #333;
+}
+
+@media (max-width: 768px) {
+  .home-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .pokemon-section h1 {
+    font-size: 36px;
+  }
+}
