@@ -246,4 +246,4 @@ For issues or questions, please open an issue on the repository.
 
 ---
 
-**Built by English Mast**
+**_*Built by English Mast*_**
