@@ -39,7 +39,7 @@ This project is designed to feel both approachable and functional: users can cre
 
 ### APIs
 
-- **PokeAPI** - Pokémon data and images
+- **PokeAPI Key** - Pokemon Name and Images
 
 ## 📁 Project Structure
 

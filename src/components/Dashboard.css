@@ -12,6 +12,7 @@
   padding: 20px;
   border-bottom: 1px solid #ddd;
   background-color: #f9f9f9;
+  gap: 16px;
 }
 
 .header-left h1 {
@@ -92,6 +93,15 @@
 
 .btn-logout:hover {
   background-color: #da190b;
+}
+
+.menu-toggle {
+  display: none;
+  background-color: #111827;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 1.1rem;
 }
 
 .chat-container {
@@ -243,14 +253,28 @@
 
 @media (max-width: 768px) {
   .dashboard-header {
-    flex-direction: column;
-    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: space-between;
     text-align: center;
   }
 
+  .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .header-right {
-    flex-direction: column;
+    display: none;
     width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    padding-top: 8px;
+  }
+
+  .header-right.mobile-open {
+    display: flex;
   }
 
   .user-info {

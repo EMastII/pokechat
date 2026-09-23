@@ -63,24 +63,6 @@
   cursor: not-allowed;
 }
 
-.password-group {
-  position: relative;
-}
-
-.forgot-password {
-  position: absolute;
-  right: 0;
-  top: 0;
-  font-size: 12px;
-  color: #2196f3;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.forgot-password:hover {
-  text-decoration: underline;
-}
-
 .pokemon-input-container {
   display: flex;
   gap: 10px;

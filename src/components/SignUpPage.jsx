@@ -70,31 +70,49 @@ const SignUpPage = ({ onSignUpSuccess }) => {
   const handleRandomPokemon = async () => {
     const randomPokemon =
       pokemonList[Math.floor(Math.random() * pokemonList.length)];
+    if (!randomPokemon) {
+      return;
+    }
     selectPokemon(randomPokemon);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    const trimmedPassword = formData.password.trim();
+    const trimmedFavoritePokemon = formData.favoritePokemon.trim();
 
     if (
-      !formData.name ||
-      !formData.email ||
-      !formData.password ||
-      !formData.favoritePokemon
+      !trimmedName ||
+      !trimmedEmail ||
+      !trimmedPassword ||
+      !trimmedFavoritePokemon
     ) {
-      setError("Please fill in all fields");
-      setLoading(false);
+      setError("Please fill in all required fields.");
       return;
     }
 
+    if (!/^\S+@\S+\.\S+$/.test(trimmedEmail)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (trimmedPassword.length < 8) {
+      setError("Password must be at least 8 characters long.");
+      return;
+    }
+
+    setLoading(true);
+
     try {
       const user = await signUp({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        favoritePokemon: formData.favoritePokemon,
+        name: trimmedName,
+        email: trimmedEmail,
+        password: trimmedPassword,
+        favoritePokemon: trimmedFavoritePokemon,
         pokemonData: selectedPokemon,
       });
 

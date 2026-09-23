@@ -8,6 +8,7 @@ const HomePage = () => {
   const [pokemonList, setPokemonList] = useState([]);
   const [visibleCount, setVisibleCount] = useState(3);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -15,9 +16,9 @@ const HomePage = () => {
       try {
         setLoading(true);
         setError("");
-        const data = await fetchFeaturedPokemon();
+        const data = await fetchFeaturedPokemon(0, 3);
         setPokemonList(data);
-      } catch (err) {
+      } catch {
         setError(
           "Sorry, something went wrong during the request. There may be a connection issue or the server may be down. Please try again later.",
         );
@@ -30,10 +31,25 @@ const HomePage = () => {
   }, []);
 
   const visiblePokemon = pokemonList.slice(0, visibleCount);
-  const hasMorePokemon = visibleCount < pokemonList.length;
+  const hasMorePokemon = pokemonList.length >= visibleCount;
 
-  const handleShowMore = () => {
-    setVisibleCount((current) => current + 3);
+  const handleShowMore = async () => {
+    if (loadingMore) {
+      return;
+    }
+
+    try {
+      setLoadingMore(true);
+      const nextBatch = await fetchFeaturedPokemon(pokemonList.length, 3);
+      setPokemonList((current) => [...current, ...nextBatch]);
+      setVisibleCount((current) => current + 3);
+    } catch {
+      setError(
+        "Sorry, we could not load the next set of Pokémon. Please try again in a moment.",
+      );
+    } finally {
+      setLoadingMore(false);
+    }
   };
 
   return (
@@ -108,8 +124,9 @@ const HomePage = () => {
                     type="button"
                     className="show-more-button"
                     onClick={handleShowMore}
+                    disabled={loadingMore}
                   >
-                    Show more
+                    {loadingMore ? "Loading..." : "Show more"}
                   </button>
                 )}
               </>

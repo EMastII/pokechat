@@ -24,16 +24,29 @@ const SignInPage = ({ onSignInSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
-    if (!formData.email || !formData.password) {
-      setError("Please fill in all fields");
-      setLoading(false);
+    const trimmedEmail = formData.email.trim();
+    const trimmedPassword = formData.password.trim();
+
+    if (!trimmedEmail || !trimmedPassword) {
+      setError("Please fill in all required fields.");
       return;
     }
 
+    if (!/^\S+@\S+\.\S+$/.test(trimmedEmail)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (trimmedPassword.length < 8) {
+      setError("Password must be at least 8 characters long.");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const user = await signIn(formData.email, formData.password);
+      const user = await signIn(trimmedEmail, trimmedPassword);
       onSignInSuccess(user);
       navigate("/dashboard");
     } catch (err) {
@@ -70,25 +83,16 @@ const SignInPage = ({ onSignInSuccess }) => {
 
           <div className="form-group">
             <label htmlFor="signin-password">Password</label>
-            <div className="password-group">
-              <input
-                id="signin-password"
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                placeholder="••••••••••"
-                disabled={loading}
-                required
-              />
-              <button
-                type="button"
-                className="forgot-password"
-                aria-label="Forgot password"
-              >
-                Forgot password?
-              </button>
-            </div>
+            <input
+              id="signin-password"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder="••••••••••"
+              disabled={loading}
+              required
+            />
           </div>
 
           <button type="submit" className="btn-primary" disabled={loading}>
@@ -97,7 +101,7 @@ const SignInPage = ({ onSignInSuccess }) => {
         </form>
 
         <p className="auth-switch">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <button onClick={() => navigate("/signup")} className="link-btn">
             Sign up
           </button>

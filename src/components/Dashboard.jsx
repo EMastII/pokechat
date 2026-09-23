@@ -12,6 +12,7 @@ const Dashboard = ({ user, onLogout }) => {
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -85,7 +86,17 @@ const Dashboard = ({ user, onLogout }) => {
         <div className="header-left">
           <h1>PokéChat - Team Chat</h1>
         </div>
-        <div className="header-right">
+
+        <button
+          type="button"
+          className="menu-toggle"
+          aria-label="Toggle navigation menu"
+          onClick={() => setMobileMenuOpen((current) => !current)}
+        >
+          ☰
+        </button>
+
+        <div className={`header-right ${mobileMenuOpen ? "mobile-open" : ""}`}>
           <div className="user-info">
             {user.pokemonData?.imageUrl && (
               <img
@@ -102,11 +113,20 @@ const Dashboard = ({ user, onLogout }) => {
           <div className="header-buttons">
             <button
               className="btn-edit-profile"
-              onClick={() => setShowEditProfile(true)}
+              onClick={() => {
+                setShowEditProfile(true);
+                setMobileMenuOpen(false);
+              }}
             >
               Edit Profile
             </button>
-            <button className="btn-logout" onClick={handleLogout}>
+            <button
+              className="btn-logout"
+              onClick={() => {
+                handleLogout();
+                setMobileMenuOpen(false);
+              }}
+            >
               Sign out
             </button>
           </div>
