@@ -1,7 +1,5 @@
-// Mock server API utilities
 const API_URL = "http://localhost:3000/api";
 
-// Simulated user database (in real app, would be server-side)
 const users = JSON.parse(localStorage.getItem("pokechat_users")) || [];
 
 const saveUsers = () => {
@@ -14,7 +12,6 @@ const saveMessages = () => {
   localStorage.setItem("pokechat_messages", JSON.stringify(messages));
 };
 
-// Authentication API
 export const signUp = async (userData) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -33,7 +30,6 @@ export const signUp = async (userData) => {
       users.push(newUser);
       saveUsers();
 
-      // Return user without password
       const { password, ...userWithoutPassword } = newUser;
       resolve(userWithoutPassword);
     }, 500);
@@ -55,7 +51,6 @@ export const signIn = async (email, password) => {
         return;
       }
 
-      // Return user without password
       const { password: _, ...userWithoutPassword } = user;
       resolve(userWithoutPassword);
     }, 500);
@@ -72,7 +67,6 @@ export const updateProfile = async (userId, updatedData) => {
         return;
       }
 
-      // If email is being changed, check if it's already in use
       if (updatedData.email && updatedData.email !== users[userIndex].email) {
         if (
           users.some((u) => u.email === updatedData.email && u.id !== userId)
@@ -115,7 +109,6 @@ export const changePassword = async (userId, currentPassword, newPassword) => {
   });
 };
 
-// Chat API
 export const sendMessage = async (userId, userName, message, userAvatar) => {
   return new Promise((resolve) => {
     setTimeout(() => {

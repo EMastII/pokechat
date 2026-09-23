@@ -34,7 +34,6 @@ code {
   min-height: 100vh;
 }
 
-/* Common Styles */
 button {
   cursor: pointer;
   border: none;
@@ -64,7 +63,7 @@ textarea:focus {
   box-shadow: 0 0 5px rgba(33, 150, 243, 0.3);
 }
 
-/* Modal Styles */
+
 .modal-overlay {
   position: fixed;
   top: 0;
