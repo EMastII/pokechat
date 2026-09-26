@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { fetchAllPokemon, fetchPokemonByName } from "../utils/pokeApi";
 import { updateProfile } from "../utils/api";
 import ChangePasswordModal from "./ChangePasswordModal";
 import "./EditProfileModal.css";
 
-const EditProfileModal = ({ user, onClose, onSave }) => {
+const EditProfileModal = ({
+  user,
+  onClose,
+  onSave,
+  fetchAllPokemon,
+  fetchPokemonByName,
+}) => {
   const [formData, setFormData] = useState({
     name: user.name,
     email: user.email,
@@ -25,12 +30,32 @@ const EditProfileModal = ({ user, onClose, onSave }) => {
     loadPokemonList();
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   const loadPokemonList = async () => {
     setLoading(true);
-    const pokemon = await fetchAllPokemon(151);
-    setPokemonList(pokemon);
-    setFilteredPokemon(pokemon);
-    setLoading(false);
+    setError("");
+
+    try {
+      const pokemon = await fetchAllPokemon(151);
+      setPokemonList(pokemon);
+      setFilteredPokemon(pokemon);
+    } catch (err) {
+      setError(
+        "Unable to load Pokémon list right now. Please try again later.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -63,9 +88,16 @@ const EditProfileModal = ({ user, onClose, onSave }) => {
       favoritePokemon: pokemon.name,
     }));
 
-    const pokemonData = await fetchPokemonByName(pokemon.name);
-    setSelectedPokemon(pokemonData);
-    setShowPokemonDropdown(false);
+    try {
+      const pokemonData = await fetchPokemonByName(pokemon.name);
+      setSelectedPokemon(pokemonData);
+    } catch (err) {
+      setError(
+        "Unable to load the selected Pokémon details. Please try again.",
+      );
+    } finally {
+      setShowPokemonDropdown(false);
+    }
   };
 
   const handleRandomPokemon = async () => {
@@ -86,11 +118,27 @@ const EditProfileModal = ({ user, onClose, onSave }) => {
     }
 
     try {
+      const pokemonData =
+        selectedPokemon &&
+        selectedPokemon.name.toLowerCase() ===
+          formData.favoritePokemon.trim().toLowerCase()
+          ? selectedPokemon
+          : await fetchPokemonByName(formData.favoritePokemon.trim());
+
+      if (!pokemonData) {
+        setError(
+          "The Pokémon you entered could not be found. Please enter a valid Pokémon name.",
+        );
+        return;
+      }
+
+      setSelectedPokemon(pokemonData);
+
       const updatedUser = await updateProfile(user.id, {
         name: formData.name,
         email: formData.email,
         favoritePokemon: formData.favoritePokemon,
-        pokemonData: selectedPokemon,
+        pokemonData: pokemonData,
       });
 
       onSave(updatedUser);
@@ -102,8 +150,15 @@ const EditProfileModal = ({ user, onClose, onSave }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
+    <div
+      className="modal-overlay"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <div className="modal" onClick={(event) => event.stopPropagation()}>
         <div className="modal-header">
           <h2>Edit Profile</h2>
           <p>

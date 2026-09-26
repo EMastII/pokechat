@@ -117,6 +117,16 @@
   background-color: #fff;
 }
 
+.message-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.message-item {
+  list-style: none;
+}
+
 .empty-state {
   display: flex;
   justify-content: center;
@@ -143,6 +153,7 @@
 
 .message.own {
   flex-direction: row-reverse;
+  justify-content: flex-end;
 }
 
 .message-avatar {
@@ -155,13 +166,21 @@
 }
 
 .message-content {
-  flex: 1;
   display: flex;
   flex-direction: column;
+  width: min(72%, 420px);
+  max-width: 420px;
+  min-width: 0;
+  flex: 0 0 auto;
 }
 
 .message.own .message-content {
   align-items: flex-end;
+  margin-left: auto;
+}
+
+.message-content > * {
+  max-width: 100%;
 }
 
 .message-header {
@@ -173,6 +192,8 @@
 
 .message.own .message-header {
   flex-direction: row-reverse;
+  width: 100%;
+  justify-content: flex-end;
 }
 
 .message-username {
@@ -187,25 +208,33 @@
 }
 
 .message-text {
+  display: block;
   background-color: #f0f0f0;
   padding: 10px 12px;
   border-radius: 8px;
   color: #333;
   word-break: break-word;
-  max-width: 500px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .message.own .message-text {
   background-color: #2196f3;
   color: white;
+  text-align: right;
 }
 
 .message-input-area {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
   display: flex;
   gap: 10px;
   padding: 20px;
   border-top: 1px solid #ddd;
-  background-color: #f9f9f9;
+  background-color: rgba(249, 249, 249, 0.98);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .message-input {
@@ -253,15 +282,33 @@
 
 @media (max-width: 768px) {
   .dashboard-header {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-between;
-    text-align: center;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 10px;
+  }
+
+  .header-left {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .header-left h1 {
+    font-size: 1rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .menu-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    min-width: 42px;
+    margin-left: auto;
   }
 
   .header-right {
@@ -292,7 +339,37 @@
     width: 100%;
   }
 
+  .chat-container {
+    min-height: 0;
+  }
+
+  .messages-area {
+    padding: 16px 12px 96px;
+  }
+
+  .message {
+    gap: 8px;
+  }
+
+  .message-content {
+    width: min(78%, 420px);
+    max-width: 420px;
+    min-width: 0;
+    flex: 0 0 auto;
+  }
+
   .message-text {
+    width: 100%;
     max-width: 100%;
+  }
+
+  .message-input-area {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+    background: rgba(249, 249, 249, 0.98);
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04);
   }
 }

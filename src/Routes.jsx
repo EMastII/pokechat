@@ -6,7 +6,7 @@ import SignUpPage from "./components/SignUpPage";
 import SignInPage from "./components/SignInPage";
 import Dashboard from "./components/Dashboard";
 
-function Routes() {
+function Routes({ fetchAllPokemon, fetchPokemonByName, fetchFeaturedPokemon }) {
   const { user, login, logout, loading } = useContext(UserContext);
 
   if (loading) {
@@ -20,14 +20,33 @@ function Routes() {
 
   return (
     <RouterRoutes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/signup" element={<SignUpPage onSignUpSuccess={login} />} />
+      <Route
+        path="/"
+        element={<HomePage fetchFeaturedPokemon={fetchFeaturedPokemon} />}
+      />
+      <Route
+        path="/signup"
+        element={
+          <SignUpPage
+            onSignUpSuccess={login}
+            fetchAllPokemon={fetchAllPokemon}
+            fetchPokemonByName={fetchPokemonByName}
+          />
+        }
+      />
       <Route path="/signin" element={<SignInPage onSignInSuccess={login} />} />
 
       {user ? (
         <Route
           path="/dashboard/*"
-          element={<Dashboard user={user} onLogout={logout} />}
+          element={
+            <Dashboard
+              user={user}
+              onLogout={logout}
+              fetchAllPokemon={fetchAllPokemon}
+              fetchPokemonByName={fetchPokemonByName}
+            />
+          }
         />
       ) : (
         <Route path="/dashboard/*" element={<Navigate to="/" replace />} />

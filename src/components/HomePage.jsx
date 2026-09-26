@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchFeaturedPokemon } from "../utils/ThirdPartyApi";
 import "./HomePage.css";
 
-const HomePage = () => {
+const HomePage = ({ fetchFeaturedPokemon }) => {
   const navigate = useNavigate();
   const [pokemonList, setPokemonList] = useState([]);
   const [visibleCount, setVisibleCount] = useState(3);
