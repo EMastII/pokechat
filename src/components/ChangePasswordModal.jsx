@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { changePassword } from "../utils/api";
 import "./ChangePasswordModal.css";
 
@@ -11,6 +11,17 @@ const ChangePasswordModal = ({ userId, onClose, onSuccess }) => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -60,8 +71,18 @@ const ChangePasswordModal = ({ userId, onClose, onSuccess }) => {
   };
 
   return (
-    <div className="password-modal-overlay">
-      <div className="password-modal">
+    <div
+      className="password-modal-overlay"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <div
+        className="password-modal"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div className="password-modal-header">
           <h3>Change Password</h3>
           <p>Please enter your current password and choose a secure new one.</p>

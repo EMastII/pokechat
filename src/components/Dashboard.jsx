@@ -5,7 +5,7 @@ import { UserContext } from "../context/UserContext";
 import EditProfileModal from "./EditProfileModal";
 import "./Dashboard.css";
 
-const Dashboard = ({ user, onLogout }) => {
+const Dashboard = ({ user, onLogout, fetchAllPokemon, fetchPokemonByName }) => {
   const navigate = useNavigate();
   const { updateUser } = useContext(UserContext);
   const [messages, setMessages] = useState([]);
@@ -82,7 +82,7 @@ const Dashboard = ({ user, onLogout }) => {
 
   return (
     <div className="dashboard">
-      <div className="dashboard-header">
+      <header className="dashboard-header">
         <div className="header-left">
           <h1>PokéChat - Team Chat</h1>
         </div>
@@ -131,16 +131,16 @@ const Dashboard = ({ user, onLogout }) => {
             </button>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="chat-container">
-        <div className="messages-area">
+      <main className="chat-container" aria-label="Chat conversation">
+        <section className="messages-area" aria-label="Messages">
           {messages.length === 0 ? (
             <div className="empty-state">
               <p>No messages yet. Start the conversation!</p>
             </div>
           ) : (
-            <>
+            <ul className="message-list" aria-live="polite">
               {messages.map((msg, index) => {
                 const showDateSeparator =
                   index === 0 ||
@@ -148,13 +148,15 @@ const Dashboard = ({ user, onLogout }) => {
                     formatDate(messages[index - 1].timestamp);
 
                 return (
-                  <div key={msg.id}>
+                  <li key={msg.id} className="message-item">
                     {showDateSeparator && (
                       <div className="date-separator">
-                        {formatDate(msg.timestamp)}
+                        <time dateTime={msg.timestamp}>
+                          {formatDate(msg.timestamp)}
+                        </time>
                       </div>
                     )}
-                    <div
+                    <article
                       className={`message ${msg.userId === user.id ? "own" : "other"}`}
                     >
                       <img
@@ -167,20 +169,23 @@ const Dashboard = ({ user, onLogout }) => {
                           <span className="message-username">
                             {msg.userName}
                           </span>
-                          <span className="message-time">
+                          <time
+                            className="message-time"
+                            dateTime={msg.timestamp}
+                          >
                             {formatTime(msg.timestamp)}
-                          </span>
+                          </time>
                         </div>
-                        <div className="message-text">{msg.message}</div>
+                        <p className="message-text">{msg.message}</p>
                       </div>
-                    </div>
-                  </div>
+                    </article>
+                  </li>
                 );
               })}
-              <div ref={messagesEndRef} />
-            </>
+              <li ref={messagesEndRef} aria-hidden="true" />
+            </ul>
           )}
-        </div>
+        </section>
 
         <form className="message-input-area" onSubmit={handleSendMessage}>
           <input
@@ -199,13 +204,15 @@ const Dashboard = ({ user, onLogout }) => {
             <span>➤</span>
           </button>
         </form>
-      </div>
+      </main>
 
       {showEditProfile && (
         <EditProfileModal
           user={user}
           onClose={() => setShowEditProfile(false)}
           onSave={handleProfileUpdate}
+          fetchAllPokemon={fetchAllPokemon}
+          fetchPokemonByName={fetchPokemonByName}
         />
       )}
     </div>

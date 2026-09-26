@@ -265,7 +265,13 @@
 }
 
 @media (max-width: 600px) {
+  .modal-overlay {
+    padding: 10px;
+  }
+
   .modal {
+    width: min(100%, 420px);
+    max-width: 420px;
     padding: 20px;
   }
 

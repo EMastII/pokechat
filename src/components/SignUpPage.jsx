@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchAllPokemon, fetchPokemonByName } from "../utils/pokeApi";
 import { signUp } from "../utils/api";
 import "./AuthPages.css";
 
-const SignUpPage = ({ onSignUpSuccess }) => {
+const SignUpPage = ({
+  onSignUpSuccess,
+  fetchAllPokemon,
+  fetchPokemonByName,
+}) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -26,10 +29,19 @@ const SignUpPage = ({ onSignUpSuccess }) => {
 
   const loadPokemonList = async () => {
     setLoading(true);
-    const pokemon = await fetchAllPokemon(151);
-    setPokemonList(pokemon);
-    setFilteredPokemon(pokemon);
-    setLoading(false);
+    setError("");
+
+    try {
+      const pokemon = await fetchAllPokemon(151);
+      setPokemonList(pokemon);
+      setFilteredPokemon(pokemon);
+    } catch (err) {
+      setError(
+        "Unable to load Pokémon list right now. Please try again later.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -62,9 +74,16 @@ const SignUpPage = ({ onSignUpSuccess }) => {
       favoritePokemon: pokemon.name,
     }));
 
-    const pokemonData = await fetchPokemonByName(pokemon.name);
-    setSelectedPokemon(pokemonData);
-    setShowPokemonDropdown(false);
+    try {
+      const pokemonData = await fetchPokemonByName(pokemon.name);
+      setSelectedPokemon(pokemonData);
+    } catch (err) {
+      setError(
+        "Unable to load the selected Pokémon details. Please try again.",
+      );
+    } finally {
+      setShowPokemonDropdown(false);
+    }
   };
 
   const handleRandomPokemon = async () => {
@@ -108,12 +127,28 @@ const SignUpPage = ({ onSignUpSuccess }) => {
     setLoading(true);
 
     try {
+      const pokemonData =
+        selectedPokemon &&
+        selectedPokemon.name.toLowerCase() ===
+          trimmedFavoritePokemon.toLowerCase()
+          ? selectedPokemon
+          : await fetchPokemonByName(trimmedFavoritePokemon);
+
+      if (!pokemonData) {
+        setError(
+          "The Pokémon you entered could not be found. Please enter a valid Pokémon name.",
+        );
+        return;
+      }
+
+      setSelectedPokemon(pokemonData);
+
       const user = await signUp({
         name: trimmedName,
         email: trimmedEmail,
         password: trimmedPassword,
         favoritePokemon: trimmedFavoritePokemon,
-        pokemonData: selectedPokemon,
+        pokemonData: pokemonData,
       });
 
       onSignUpSuccess(user);
